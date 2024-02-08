@@ -49,16 +49,32 @@ public class CustomerJDBCDataAccess implements CustomerDao{
 
     @Override
     public boolean existsPersonWithEmail(String email) {
-        return false;
+        var sql = """
+                SELECT count(id) 
+                from customer 
+                where email = ?
+                """;
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, email);
+        return count != null && count > 0;
     }
 
     @Override
     public boolean existsPersonWithId(Long id) {
-        return false;
+        var sql = """
+                SELECT count(id) 
+                from customer 
+                where id = ?
+                """;
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, id);
+        return count != null && count > 0;
     }
 
     @Override
     public void deleteCustomer(Long id) {
-
+        var sql = """
+                DELETE from customer
+                where id = ?
+                """;
+        jdbcTemplate.update(sql, id);
     }
 }
